@@ -1,6 +1,6 @@
 # anb-assignment
 
-This applicatiom exposes an API to search flights between supplied origin and destination.
+This application exposes an API to search flights between supplied origin and destination.
 
 Optionally, sortBy parameter can also be supplied in the API to sort the results. Details in following section.
 
