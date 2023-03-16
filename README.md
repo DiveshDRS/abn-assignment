@@ -1,10 +1,12 @@
 # anb-assignment
 
-This application exposes an API to search flights between supplied origin and destination.
+This application exposes an API to search flights between supplied origin and destination, and runs on port 4000.
 
 Optionally, sortBy parameter can also be supplied in the API to sort the results. Details in following section.
 
-Note: When FlightSearchApplication.java (com/assignment/flightsearch/FlightSearchApplication.java) is first run, it loads the data from flightdata.csv (in resources) into H2 database. The relevant code is in DataLoader class (src/main/java/com/assignment/flightsearch/dataloader/DataLoader.java)
+Note: When FlightSearchApplication.java (com/assignment/flightsearch/FlightSearchApplication.java) is first run, it loads the data from flightdata.csv (in resources) into H2 database. The relevant code is in DataLoader class (src/main/java/com/assignment/flightsearch/dataloader/DataLoader.java).
+
+The H2 console can be accessed at http://localhost:4000/h2-console once the application is up.
 
 
 
