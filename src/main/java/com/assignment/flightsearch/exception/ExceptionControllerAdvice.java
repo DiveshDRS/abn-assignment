@@ -2,6 +2,7 @@ package com.assignment.flightsearch.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.env.Environment;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Log4j2
 public class ExceptionControllerAdvice {
     @Autowired
     Environment environment;
@@ -26,15 +28,17 @@ public class ExceptionControllerAdvice {
         error.setErrorMessage(exception.getMessage());
         error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setTimestamp(LocalDateTime.now());
+        log.error(exception.toString());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorInfo> serveletRequestParameterExceptionHandler(MissingServletRequestParameterException exception) {
+    public ResponseEntity<ErrorInfo> servletRequestParameterExceptionHandler(MissingServletRequestParameterException exception) {
         ErrorInfo error = new ErrorInfo();
         error.setErrorMessage(exception.getMessage());
         error.setErrorCode(HttpStatus.BAD_REQUEST.value());
         error.setTimestamp(LocalDateTime.now());
+        log.error(exception.toString());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -44,6 +48,7 @@ public class ExceptionControllerAdvice {
         error.setErrorMessage(environment.getProperty(exception.getMessage()));
         error.setTimestamp(LocalDateTime.now());
         error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        log.error(exception.toString());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -51,7 +56,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorInfo> exceptionHandler(Exception exception) {
         ErrorInfo errorInfo = new ErrorInfo();
         errorInfo.setErrorCode(HttpStatus.BAD_REQUEST.value());
-        String errorMsg = "";
+        String errorMsg;
         if (exception instanceof MethodArgumentNotValidException exception1) {
             errorMsg = exception1.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining("; "));
@@ -62,6 +67,7 @@ public class ExceptionControllerAdvice {
         }
         errorInfo.setErrorMessage(errorMsg);
         errorInfo.setTimestamp(LocalDateTime.now());
+        log.error(exception.toString());
         return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
     }
 

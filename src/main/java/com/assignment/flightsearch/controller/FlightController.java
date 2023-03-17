@@ -1,5 +1,6 @@
 package com.assignment.flightsearch.controller;
 
+import com.assignment.flightsearch.constants.PatternConstants;
 import com.assignment.flightsearch.dto.FlightDTO;
 import com.assignment.flightsearch.exception.FlightSearchException;
 import com.assignment.flightsearch.service.FlightService;
@@ -28,8 +29,6 @@ public class FlightController {
     @Autowired
     private FlightService flightService;
 
-    private static final String sortByRegex = "priceAsc|priceDesc|durationAsc|durationDesc|^[ ]*$";
-
     /**
      * This API returns list of flights between supplied Origin and Destination in unsorted form.
      * Also using an optional parameter sortBy, the results can be sorted based on the value provided.
@@ -44,19 +43,19 @@ public class FlightController {
      */
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FlightDTO>> getFlightsBetweenOriginAndDest(@RequestParam(value = "origin") @NotNull(message = "{flight.origin.null}")
-                                                                          @NotBlank(message = "{flight.origin.blank}") @Pattern(regexp = "[A-Za-z0-9]*", message = "{flight.origin.format}")
+                                                                          @NotBlank(message = "{flight.origin.blank}") @Pattern(regexp = PatternConstants.originRegex, message = "{flight.origin.format}")
                                                                           String origin,
                                                                           @RequestParam(value = "dest") @NotNull(message = "{flight.destination.null}")
-                                                                          @NotBlank(message = "{flight.destination.blank}") @Pattern(regexp = "[A-Za-z0-9]*", message = "{flight.destination.format}")
+                                                                          @NotBlank(message = "{flight.destination.blank}") @Pattern(regexp = PatternConstants.destinationRegex, message = "{flight.destination.format}")
                                                                           String destination,
-                                                                          @RequestParam(value = "sortBy", defaultValue = "", required = false) @Pattern(regexp = sortByRegex, message = "{controller.flights.sortBy.format}")
+                                                                          @RequestParam(value = "sortBy", defaultValue = "", required = false) @Pattern(regexp = PatternConstants.sortByRegex, message = "{controller.flights.sortBy.format}")
                                                                           String sortBy) throws FlightSearchException, ConstraintViolationException {
 
         long startTime = System.currentTimeMillis();
         log.debug("Entered getFlightsBetweenOriginAndDest controller");
         List<FlightDTO> flightDTOList = flightService.getFlightsBetweenOriginAndDestination(origin.toUpperCase(), destination.toUpperCase(), sortBy);
         long endTime = System.currentTimeMillis();
-        log.info("getFlightsBetweenOriginAndDest controller completed in {}ms", (endTime - startTime));
+        log.info("getFlightsBetweenOriginAndDest: {} to {} controller completed in {}ms", origin, destination, (endTime - startTime));
         return ResponseEntity.ok(flightDTOList);
     }
 
