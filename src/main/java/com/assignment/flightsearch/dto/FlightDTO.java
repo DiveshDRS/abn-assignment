@@ -1,5 +1,6 @@
 package com.assignment.flightsearch.dto;
 
+import com.assignment.flightsearch.constants.PatternConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -20,13 +21,13 @@ public class FlightDTO {
     @NonNull
     @NotNull(message = "{flight.origin.null}")
     @NotBlank(message = "{flight.origin.blank}")
-    @Pattern(regexp = "[A-Za-z0-9]+", message = "{flight.origin.format}")
+    @Pattern(regexp = PatternConstants.originRegex, message = "{flight.origin.format}")
     private String origin;
 
     @NonNull
     @NotNull(message = "{flight.destination.null}")
     @NotBlank(message = "{flight.destination.blank}")
-    @Pattern(regexp = "[A-Za-z0-9]+", message = "{flight.destination.format}")
+    @Pattern(regexp = PatternConstants.destinationRegex, message = "{flight.destination.format}")
     private String destination;
 
     @NonNull

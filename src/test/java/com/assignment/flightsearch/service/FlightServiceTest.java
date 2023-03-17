@@ -175,6 +175,109 @@ public class FlightServiceTest {
     }
 
     @Test
+    public void testGetFlightsBetweenOriginAndDestinationEmptyOrigin_then400() {
+        String origin = "";
+        String dest = "BOM";
+        String sortBy = "";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(origin, dest, sortBy));
+
+        Assertions.assertEquals("flight.origin.blank", e.getMessage());
+    }
+
+    @Test
+    public void testGetFlightsBetweenOriginAndDestinationNullOrigin_then400() {
+        String dest = "BOM";
+        String sortBy = "";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(null, dest, sortBy));
+
+        Assertions.assertEquals("flight.origin.null", e.getMessage());
+    }
+
+    @Test
+    public void testGetFlightsBetweenOriginAndDestinationInvalidOrigin_then400() {
+        String origin = "@$";
+        String dest = "BOM";
+        String sortBy = "";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(origin, dest, sortBy));
+
+        Assertions.assertEquals("flight.origin.format", e.getMessage());
+    }
+
+    @Test
+    public void testGetFlightsBetweenOriginAndDestinationEmptyDestination_then400() {
+        String origin = "DEL";
+        String dest = "";
+        String sortBy = "";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(origin, dest, sortBy));
+
+        Assertions.assertEquals("flight.destination.blank", e.getMessage());
+    }
+
+    @Test
+    public void testGetFlightsBetweenOriginAndDestinationNullDestination_then400() {
+        String origin = "BOM";
+        String sortBy = "";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(origin, null, sortBy));
+
+        Assertions.assertEquals("flight.destination.null", e.getMessage());
+    }
+
+    @Test
+    public void testGetFlightsBetweenOriginAndDestinationInvalidDestination_then400() {
+        String origin = "DEL";
+        String dest = "@$";
+        String sortBy = "";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(origin, dest, sortBy));
+
+        Assertions.assertEquals("flight.destination.format", e.getMessage());
+    }
+
+    @Test
+    public void testGetFlightsBetweenOriginAndDestinationInvalidSortBy_then400() {
+        String origin = "DEL";
+        String dest = "BOM";
+        String sortBy = "invalidValue";
+
+        Mockito.when(flightRepository.findByOriginAndDestination(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        Exception e = Assertions.assertThrows(FlightSearchException.class,
+                () -> flightService.getFlightsBetweenOriginAndDestination(origin, dest, sortBy));
+
+        Assertions.assertEquals("controller.flights.sortBy.format", e.getMessage());
+    }
+
+    @Test
     public void testGetFlightsBetweenOriginAndDestinationNoFlights1_then400() {
         String origin = "DE";
         String dest = "BOM";
@@ -218,5 +321,4 @@ public class FlightServiceTest {
 
         Assertions.assertEquals("general.error", e.getMessage());
     }
-
 }
